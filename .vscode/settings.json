@@ -1,0 +1,20 @@
+{
+  "git.ignoreLimitWarning": true,
+  "ruby.useLanguageServer": true,
+  "ruby.useBundler": true,
+  "ruby.intellisense": "rubyLocate",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "mbessey.vscode-rufo"
+  },
+  // "editor.formatOnSave": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

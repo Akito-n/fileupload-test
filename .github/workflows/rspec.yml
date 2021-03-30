@@ -1,0 +1,34 @@
+name: rspec
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    container:
+      image: ruby:2.7.1
+      env:
+        RAILS_ENV: test
+        DATABASE_URL: postgresql://postgres:password@postgres:5432/app_test?encoding=utf8&pool=5&timeout=5000
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build App
+        run: |
+          gem install bundler
+          bundle install --quiet --jobs 4 --retry 3
+      - name: Prepare database
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
+          bin/rails db:seed_fu
+      - name: Run test
+        run: rspec
