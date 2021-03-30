@@ -67,7 +67,7 @@ const cache = new InMemoryCache()
 const uploadLink = ApolloLink.split(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   (operation) => operation.getContext().hasUpload,
-  createHttpLink({ uri: GRAPHQL_BASE_URL })
+  createUploadLink({ uri: GRAPHQL_BASE_URL })
 )
 
 export const apolloClient = new ApolloClient({
