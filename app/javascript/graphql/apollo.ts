@@ -4,12 +4,14 @@ import {
   InMemoryCache,
   ApolloLink,
   Operation,
+  HttpLink,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import Rails from '@rails/ujs'
 import * as Sentry from '@sentry/browser'
 import ActionCable from 'actioncable'
+import { createUploadLink } from 'apollo-upload-client'
 import { ActionCableLink } from './actionCableLink'
 
 const cable = ActionCable.createConsumer()
@@ -55,16 +57,23 @@ const link = ApolloLink.split(
     )
   },
   new ActionCableLink({ cable }),
+
   createHttpLink({
     uri: GRAPHQL_BASE_URL,
   })
 )
 
 const cache = new InMemoryCache()
+const uploadLink = ApolloLink.split(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  (operation) => operation.getContext().hasUpload,
+  createHttpLink({ uri: GRAPHQL_BASE_URL })
+)
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([
     sentryLink,
+    uploadLink,
     onError(({ graphQLErrors, networkError, forward, operation }) => {
       Sentry.addBreadcrumb({
         category: 'graphql',
