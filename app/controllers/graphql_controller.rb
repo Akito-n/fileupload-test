@@ -5,6 +5,7 @@ class GraphqlController < ApplicationController
   # protect_from_forgery with: :null_session
 
   def execute
+    #binding.pry
     if params[:operations].present?
       # この部分で、ゴニョればいけるけどこれだとスカラタイプを作った意味がない気がする
       operations = ensure_hash(params[:operations])
