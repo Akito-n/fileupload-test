@@ -58,9 +58,7 @@ const link = ApolloLink.split(
   },
   new ActionCableLink({ cable }),
 
-  createHttpLink({
-    uri: GRAPHQL_BASE_URL,
-  })
+  createUploadLink({ uri: GRAPHQL_BASE_URL }) as any
 )
 
 const cache = new InMemoryCache()
@@ -93,7 +91,7 @@ export const apolloClient = new ApolloClient({
       }
       return forward(operation)
     }),
-    authLink.concat((uploadLink as unknown) as ApolloLink).concat(link),
+    authLink.concat(link),
   ]),
   cache,
 })
