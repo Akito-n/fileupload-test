@@ -27,14 +27,23 @@
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-class Types::Objects::UserType < Types::BaseObject
-  def self.authorized?(object, context)
-    # only show it to users with the secret_feature enabled
-    super and context[:user_signed_in] and context[:current_user].id == object.id
+class Mutations::UpdateUser < Mutations::BaseMutation
+  null true
+
+  argument :user_id, ID, required: true
+  argument :avatar, Types::Scalars::File, required: false
+  argument :example, String, required: false
+
+  field :user, Types::Objects::UserType, null: true
+
+  def authorized?(user_id:, **args)
+    @user = User.find(user_id)
+    context[:user_signed_in]
   end
 
-  field :id, ID, null: false
-  field :email, String, null: true
-  field :avatar, Types::Scalars::File, null: true
-  field :created_at, Types::Scalars::DateTime, null: false
+  def resolve(user_id:, **args)
+    binding.pry
+    # TODO: update
+    { user: user }
+  end
 end
