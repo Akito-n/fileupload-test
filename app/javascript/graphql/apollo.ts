@@ -64,16 +64,11 @@ const link = ApolloLink.split(
 )
 
 const cache = new InMemoryCache()
-const uploadLink = ApolloLink.split(
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  (operation) => operation.getContext().hasUpload,
-  createUploadLink({ uri: GRAPHQL_BASE_URL })
-)
+const uploadLink = createUploadLink({ uri: GRAPHQL_BASE_URL })
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([
     sentryLink,
-    uploadLink,
     onError(({ graphQLErrors, networkError, forward, operation }) => {
       Sentry.addBreadcrumb({
         category: 'graphql',
@@ -98,7 +93,7 @@ export const apolloClient = new ApolloClient({
       }
       return forward(operation)
     }),
-    authLink.concat(link),
+    authLink.concat((uploadLink as unknown) as ApolloLink).concat(link),
   ]),
   cache,
 })
