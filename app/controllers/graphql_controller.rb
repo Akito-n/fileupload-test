@@ -6,10 +6,10 @@ class GraphqlController < ApplicationController
 
   def execute
     if params[:operations].present?
-      # この部分で、必要となる query と variables を設定する
+      # この部分で、ゴニョればいけるけどこれだとスカラタイプを作った意味がない気がする
       operations = ensure_hash(params[:operations])
 
-      #binding.pry
+      binding.pry
       variables = {
         "input" => operations[:variables].merge({ "file" => params["variables.file"] }),
       }
