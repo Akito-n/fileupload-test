@@ -37,4 +37,10 @@ class Types::Objects::UserType < Types::BaseObject
   field :email, String, null: true
   field :avatar, Types::Scalars::File, null: true
   field :created_at, Types::Scalars::DateTime, null: false
+  field :image, Types::Scalars::File, null: true
+  field :image_url, String, null: true
+
+  def image_url
+    object.get_image
+  end
 end
