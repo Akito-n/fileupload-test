@@ -1,5 +1,5 @@
-mutation updateUser($input: UpdateUserInput!) {
-  updateUser(input: $input) {
+mutation updateUserOnlyName($input: UpdateUserOnlyNameInput!) {
+  updateUserOnlyName(input: $input) {
     user {
       id
     }

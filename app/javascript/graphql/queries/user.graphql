@@ -2,5 +2,8 @@ query currentUser {
   currentUser {
     id
     email
+    avatar
+    image
+    imageUrl
   }
 }
