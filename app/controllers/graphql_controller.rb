@@ -5,25 +5,27 @@ class GraphqlController < ApplicationController
   # protect_from_forgery with: :null_session
 
   def execute
-    #binding.pry
     if params[:operations].present?
-      # この部分で、ゴニョればいけるけどこれだとスカラタイプを作った意味がない気がする
       operations = ensure_hash(params[:operations])
+      operation_name = operations["operationName"]
+      files = ensure_hash(params[:map]).map { |k, _| params[k] }
 
-      binding.pry
-      variables = {
-        "input" => operations[:variables].merge({ "file" => params["variables.file"] }),
-      }
-      query = operations[:query]
+      #binding.pry
+      parameter = { "input" => operations["variables"]["input"].merge({ "avatar" => files }) }
+      variables = ActionController::Parameters.new(parameter)
+      query = operations["query"]
+      #binding.pry
     else
       variables = ensure_hash(params[:variables])
       query = params[:query]
+      operation_name = params[:operationName]
+      #binding.pry
     end
-    operation_name = params[:operationName]
     context = {
       user_signed_in: user_signed_in?,
       current_user: current_user,
     }
+    #binding.pry
     result = AppSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   rescue => e
