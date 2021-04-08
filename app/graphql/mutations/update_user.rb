@@ -42,8 +42,9 @@ class Mutations::UpdateUser < Mutations::BaseMutation
   end
 
   def resolve(user_id:, **args)
-    binding.pry
-    # TODO: update
-    { user: user }
+    #binding.pry
+
+    @user.update(image: args[:avatar].first)
+    { user: @user }
   end
 end
