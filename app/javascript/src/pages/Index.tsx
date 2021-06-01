@@ -20,11 +20,11 @@ export const Index: React.FC<Props> = () => {
   const [mutate] = useUpdateUserMutation()
   const [otherMutate] = useUpdateUserOnlyNameMutation()
   const [otherInput, setOtherInput] = useState<UpdateUserOnlyNameInput>({
-    userId: '720b95f3-4ec2-4eee-9801-b4ca3802e3b8',
+    userId: currentUser?.id || '',
     example: '',
   })
   const [input, setInput] = useState<UpdateUserInput>({
-    userId: '720b95f3-4ec2-4eee-9801-b4ca3802e3b8',
+    userId: '',
     avatar: null,
     example: '',
   })
@@ -32,8 +32,9 @@ export const Index: React.FC<Props> = () => {
   console.log(currentUser?.imageUrl)
 
   useEffect(() => {
-    console.log(input)
-  }, [input])
+    if (!currentUser) return
+    setInput({ ...input, userId: currentUser.id })
+  }, [currentUser])
 
   // const files = acceptedFiles.map((file, i) => {
   //   file?.path && <li key={i}>{file.path}</li>
