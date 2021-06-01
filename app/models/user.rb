@@ -37,6 +37,10 @@ class User < ApplicationRecord
   has_one_attached :image
 
   def get_image
-    image.attached? ? url_for(image) : nil
+    image.attachment.service.send(:object_for, image.key).public_url if image.attached?
   end
+
+  # def get_image
+  #   image.attached? ? url_for(image) : nil
+  # end
 end
