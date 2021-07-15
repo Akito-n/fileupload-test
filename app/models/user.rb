@@ -39,7 +39,7 @@ class User < ApplicationRecord
   def get_image
     #image.attachment.service.send(:object_for, image.key).public_url if image.attached?
 
-    rails_blob_path(image.blob) if image.attached?
+    rails_blob_path(image.blob, only_path: true) if image.attached?
   end
 
   # def get_image
